@@ -8,60 +8,60 @@ datasource db {
 }
 
 model Users {
-  id        String     @id @default(auto()) @map("_id") @db.ObjectId
-  email     String     
+  id        String      @id @default(auto()) @map("_id") @db.ObjectId
+  email     String
   name      String
   password  String
-  isActive  Boolean    @default(true)
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
+  isActive  Boolean     @default(true)
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
   Shipments Shipments[] // one to many relation
 }
 
 model Shipments {
-  id                String             @id @default(auto()) @map("_id") @db.ObjectId
-  startAddress      String
-  shippingDate      DateTime
-  addresseeId       String             @db.ObjectId
-  addressee         Addressee          @relation(fields: [addresseeId], references: [id])
-  referencePoint    String?
-  indications       String?
-  endAddress        String
-  departmentId      String             @db.ObjectId
-  department        Department         @relation(fields: [departmentId], references: [id])
-  townId            String             @db.ObjectId
-  towns             Towns              @relation(fields: [townId], references: [id])
-  UserId            String             @db.ObjectId
-  user              Users              @relation(fields: [UserId], references: [id])
+  id                 String              @id @default(auto()) @map("_id") @db.ObjectId
+  deliveryAddress    String
+  shippingDate       DateTime
+  addresseeId        String              @db.ObjectId
+  addressee          Addressee           @relation(fields: [addresseeId], references: [id])
+  referencePoint     String?
+  indications        String?
+  pickUpAddress      String
+  departmentId       String              @db.ObjectId
+  department         Department          @relation(fields: [departmentId], references: [id])
+  townId             String              @db.ObjectId
+  towns              Towns               @relation(fields: [townId], references: [id])
+  UserId             String              @db.ObjectId
+  user               Users               @relation(fields: [UserId], references: [id])
   ShipmentsProductss ShipmentsProducts[] // one to many relation
 }
 
 model Addressee {
-  id        String     @id @default(auto()) @map("_id") @db.ObjectId
+  id        String      @id @default(auto()) @map("_id") @db.ObjectId
   firstName String
   lastName  String
-  email     String     @unique
+  email     String      @unique
   phone     String
   Shipments Shipments[] // one to many relation
 }
 
 model Products {
-  id                String             @id @default(auto()) @map("_id") @db.ObjectId
-  length            Float
-  height            Float
-  width             Float
-  weight            Float
-  description       String
+  id                 String              @id @default(auto()) @map("_id") @db.ObjectId
+  length             Float
+  height             Float
+  width              Float
+  weight             Float
+  description        String
   ShipmentsProductss ShipmentsProducts[]
 }
 
 model ShipmentsProducts {
-  id         String   @id @default(auto()) @map("_id") @db.ObjectId
-  shipmentId String   @db.ObjectId
-  ProductsId String   @db.ObjectId
-  quantity   Int      @default(1) //
+  id         String    @id @default(auto()) @map("_id") @db.ObjectId
+  shipmentId String    @db.ObjectId
+  ProductsId String    @db.ObjectId
+  quantity   Int       @default(1) //
   shipment   Shipments @relation(fields: [shipmentId], references: [id]) // foreign key
-  Products   Products @relation(fields: [ProductsId], references: [id]) // foreign key
+  Products   Products  @relation(fields: [ProductsId], references: [id]) // foreign key
 
   @@unique([shipmentId, ProductsId])
 }
@@ -69,16 +69,16 @@ model ShipmentsProducts {
 //catalog tables
 
 model Department {
-  id       String     @id @default(auto()) @map("_id") @db.ObjectId
-  name     String     @unique
-  towns    Towns[] // one to many relation
+  id        String      @id @default(auto()) @map("_id") @db.ObjectId
+  name      String      @unique
+  towns     Towns[] // one to many relation
   Shipments Shipments[]
 }
 
 model Towns {
-  id           String     @id @default(auto()) @map("_id") @db.ObjectId
-  name         String     @unique
-  departmentId String     @db.ObjectId
-  deparment    Department @relation(fields: [departmentId], references: [id])
-  Shipments     Shipments[]
+  id           String      @id @default(auto()) @map("_id") @db.ObjectId
+  name         String      @unique
+  departmentId String      @db.ObjectId
+  deparment    Department  @relation(fields: [departmentId], references: [id])
+  Shipments    Shipments[]
 }
