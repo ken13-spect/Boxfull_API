@@ -24,15 +24,14 @@ export class ProductsService {
     return this.prisma.products.findMany();
   }
 
-  /*//findByShipId
-  async findByShipId(shipId: string): Promise<Products[]> {
+  async findByShipId(id: string): Promise<Products[]> {
     return this.prisma.products.findMany({
       where: {
-        ShipmentsId: shipId,
+        ShipmentsId: id,
       },
     });
   }
-*/
+
   async findOne(id: string): Promise<Products> {
     return this.prisma.products.findFirst({
       where: {

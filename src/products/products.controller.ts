@@ -37,12 +37,17 @@ export class ProductsController {
   }
 
   @Get()
-  async findOne(@Query('idProduct') id: string) {
+  async findOne(@Query('id') id: string) {
     try {
       return this.productsService.findOne(id);
     } catch (error) {
       throw new HttpException('Product not found', HttpStatus.NOT_FOUND);
     }
+  }
+
+  @Get('/shiptment')
+  async getAllProductByShiptment(@Query('id') id : string){
+    return this.productsService.findByShipId(id)
   }
 
   @Patch('/update')
