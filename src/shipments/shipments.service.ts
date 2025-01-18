@@ -1,26 +1,28 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateShipmentDto } from './dto/create-shipment.dto';
-import { UpdateShipmentDto } from './dto/update-shipment.dto';
+import { PrismaService } from 'src/prisma/prisma.service';
+import { Shipment } from './entities/shipment.entity';
+
 
 @Injectable()
 export class ShipmentsService {
-  create(createShipmentDto: CreateShipmentDto) {
-    return 'This action adds a new shipment';
+  constructor(private prisma: PrismaService) {}
+
+  async create(userId: string, departmentId: string, townId: string, createShipmentDto: CreateShipmentDto) {
+    try{
+      return await this.prisma.shipments.create({
+        data: {
+          ...createShipmentDto,
+         departmentId: departmentId,
+         townId: townId,
+         UserId: userId
+         
+        }
+        
+      });
+    }catch(error){
+      throw new HttpException('Not created', HttpStatus.BAD_REQUEST)
+    }
   }
 
-  findAll() {
-    return `This action returns all shipments`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} shipment`;
-  }
-
-  update(id: number, updateShipmentDto: UpdateShipmentDto) {
-    return `This action updates a #${id} shipment`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} shipment`;
-  }
 }

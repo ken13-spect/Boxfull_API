@@ -19,56 +19,38 @@ model Users {
 }
 
 model Shipments {
-  id                 String              @id @default(auto()) @map("_id") @db.ObjectId
+  id                 String     @id @default(auto()) @map("_id") @db.ObjectId
   deliveryAddress    String
   shippingDate       DateTime
-  addresseeId        String              @db.ObjectId
-  addressee          Addressee           @relation(fields: [addresseeId], references: [id])
   referencePoint     String?
   indications        String?
+  addresseeFirstName String
+  addresseeLastName  String
+  addresseeEmail     String     @unique
+  addresseePhone     String
   pickUpAddress      String
-  departmentId       String              @db.ObjectId
-  department         Department          @relation(fields: [departmentId], references: [id])
-  townId             String              @db.ObjectId
-  towns              Towns               @relation(fields: [townId], references: [id])
-  UserId             String              @db.ObjectId
-  user               Users               @relation(fields: [UserId], references: [id])
-  ShipmentsProductss ShipmentsProducts[] // one to many relation
-}
-
-model Addressee {
-  id        String      @id @default(auto()) @map("_id") @db.ObjectId
-  firstName String
-  lastName  String
-  email     String      @unique
-  phone     String
-  Shipments Shipments[] // one to many relation
+  departmentId       String     @db.ObjectId
+  department         Department @relation(fields: [departmentId], references: [id])
+  townId             String     @db.ObjectId
+  towns              Towns      @relation(fields: [townId], references: [id])
+  UserId             String     @db.ObjectId
+  user               Users      @relation(fields: [UserId], references: [id])
+  products           Products[]
 }
 
 model Products {
-  id                 String              @id @default(auto()) @map("_id") @db.ObjectId
-  length             Float
-  height             Float
-  width              Float
-  weight             Float
-  units              Float 
-  description        String
-  ShipmentsProductss ShipmentsProducts[]
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  length      Float
+  height      Float
+  width       Float
+  weight      Float
+  units       Float
+  description String
+  ShipmentsId String    @db.ObjectId
+  shipments   Shipments @relation(fields: [ShipmentsId], references: [id])
 }
 
-model ShipmentsProducts {
-  id         String    @id @default(auto()) @map("_id") @db.ObjectId
-  shipmentId String    @db.ObjectId
-  ProductsId String    @db.ObjectId
-  quantity   Int       @default(1) //
-  shipment   Shipments @relation(fields: [shipmentId], references: [id]) // foreign key
-  Products   Products  @relation(fields: [ProductsId], references: [id]) // foreign key
-
-  @@unique([shipmentId, ProductsId])
-}
-
-//catalog tables
-
+//catalog table
 model Department {
   id        String      @id @default(auto()) @map("_id") @db.ObjectId
   name      String      @unique
