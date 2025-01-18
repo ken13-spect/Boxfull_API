@@ -29,10 +29,10 @@ model Shipments {
   addresseeEmail     String     @unique
   addresseePhone     String
   pickUpAddress      String
-  departmentId       String     @db.ObjectId
-  department         Department @relation(fields: [departmentId], references: [id])
-  townId             String     @db.ObjectId
-  towns              Towns      @relation(fields: [townId], references: [id])
+  DepartmentId       String     @db.ObjectId
+  department         Department @relation(fields: [DepartmentId], references: [id])
+  TownId             String     @db.ObjectId
+  towns              Towns      @relation(fields: [TownId], references: [id])
   UserId             String     @db.ObjectId
   user               Users      @relation(fields: [UserId], references: [id])
   products           Products[]
@@ -45,9 +45,9 @@ model Products {
   width       Float
   weight      Float
   units       Float
-  description String
   ShipmentsId String    @db.ObjectId
   shipments   Shipments @relation(fields: [ShipmentsId], references: [id])
+  description String
 }
 
 //catalog table

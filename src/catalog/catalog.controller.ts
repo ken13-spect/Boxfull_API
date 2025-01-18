@@ -7,16 +7,13 @@ import { AuthGuard } from 'src/auth/auth.guard/auth.guard';
 export class CatalogController {
   constructor(private readonly catalogService: CatalogService) {}
 
-  @Get('departmet')
-  async getDepartments(){
-    return this.catalogService.getDepartmets()
+  @Get('departmets')
+  async getDepartments() {
+    return this.catalogService.getDepartmets();
   }
 
   @Get('towns')
-
-  async getTownsByDepartment(@Query('id') id : string)
-  {
+  async getTownsByDepartment(@Query('id') id: string) {
     return await this.catalogService.getTownsByDepartment(id);
   }
-
 }

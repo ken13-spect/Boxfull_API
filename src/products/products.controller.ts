@@ -22,7 +22,7 @@ import { AuthGuard } from 'src/auth/auth.guard/auth.guard';
 export class ProductsController {
   constructor(private productsService: ProductsService) {}
 
-  @Post()
+  /*@Post()
   create(@Query('id') idShip: string, @Body() createProductDto: CreateProductDto) {
     try {
       return this.productsService.create(idShip,createProductDto);
@@ -30,7 +30,7 @@ export class ProductsController {
       throw new HttpException('Product not delete', HttpStatus.BAD_REQUEST);
     }
   }
-
+*/
   @Get('/all')
   async findAll() {
     return this.productsService.getAll();

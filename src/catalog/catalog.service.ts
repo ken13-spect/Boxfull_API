@@ -12,10 +12,10 @@ export class CatalogService {
   }
 
   //get all towns by Department
-  async getTownsByDepartment(apartmentId: string): Promise<Towns[]> {
+  async getTownsByDepartment(id: string): Promise<Towns[]> {
     return await this.prisma.towns.findMany({
       where: {
-        departmentId: apartmentId,
+        departmentId: id,
       },
     });
   }
