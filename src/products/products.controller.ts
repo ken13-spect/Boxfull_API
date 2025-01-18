@@ -24,11 +24,7 @@ export class ProductsController {
 
   /*@Post()
   create(@Query('id') idShip: string, @Body() createProductDto: CreateProductDto) {
-    try {
       return this.productsService.create(idShip,createProductDto);
-    } catch (error) {
-      throw new HttpException('Product not delete', HttpStatus.BAD_REQUEST);
-    }
   }
 */
   @Get('/all')
@@ -38,11 +34,7 @@ export class ProductsController {
 
   @Get()
   async findOne(@Query('id') id: string) {
-    try {
       return this.productsService.findOne(id);
-    } catch (error) {
-      throw new HttpException('Product not found', HttpStatus.NOT_FOUND);
-    }
   }
 
   @Get('/shiptment')
@@ -52,20 +44,11 @@ export class ProductsController {
 
   @Patch('/update')
   async update(@Query('idProduct') id: string, @Body() updateProductDto: UpdateProductDto) {
-    try{
       return this.productsService.update(id,updateProductDto)
-      
-    }catch(error){
-      throw new HttpException( 'Product that has already been removed', HttpStatus.BAD_REQUEST);
-    }
   }
 
   @Delete()
   async remove(@Query('id') id: string) {
-    try {
       return await this.productsService.remove(id);
-    } catch (error) {
-      throw new HttpException('Product not delete', HttpStatus.BAD_REQUEST);
-    }
-  }
+   }
 }
