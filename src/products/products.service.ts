@@ -10,16 +10,29 @@ import { ExceptionsHandler } from '@nestjs/core/exceptions/exceptions-handler';
 export class ProductsService {
   constructor(private prisma: PrismaService) {}
 
-  async create(createProductDto: CreateProductDto): Promise<Products> {
+  async create(
+    shipId: string,
+    createProductDto: CreateProductDto,
+  ): Promise<Products> {
     return this.prisma.products.create({
       data: {
         ...createProductDto,
+        ShipmentId: shipId,
       },
     });
   }
 
   async getAll(): Promise<Products[]> {
     return this.prisma.products.findMany();
+  }
+
+  //findByShipId
+  async findByShipId(shipId: string): Promise<Products[]> {
+    return this.prisma.products.finMany({
+      where: {
+        ShipmentsId: shipId,
+      },
+    });
   }
 
   async findOne(id: string): Promise<Products> {
@@ -30,15 +43,18 @@ export class ProductsService {
     });
   }
 
-  async update(id: string, updateProductDto: UpdateProductDto): Promise<Products>{
+  async update(
+    id: string,
+    updateProductDto: UpdateProductDto,
+  ): Promise<Products> {
     return await this.prisma.products.update({
-      where:{
-        id: id
+      where: {
+        id: id,
       },
-      data:{
-        ...updateProductDto
-      }
-    })
+      data: {
+        ...updateProductDto,
+      },
+    });
   }
 
   async remove(id: string): Promise<Products> {
