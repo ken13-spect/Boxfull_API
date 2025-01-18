@@ -1,36 +1,64 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  UseGuards,
+  HttpException,
+  HttpStatus,
+  Query,
+} from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
-import { AuthGuard } from 'src/auth/auth.guard/auth.guard';
+
 
 @Controller('products')
-@UseGuards(AuthGuard)
 export class ProductsController {
   constructor(private productsService: ProductsService) {}
 
   @Post()
   create(@Body() createProductDto: CreateProductDto) {
-    
+    try {
+      return this.productsService.create(createProductDto);
+    } catch (error) {
+      throw new HttpException('Product not delete', HttpStatus.BAD_REQUEST);
+    }
   }
 
-  @Get()
-  findAll() {
+  @Get('/all')
+  async findAll() {
     return this.productsService.getAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-   
+  @Get()
+  async findOne(@Query('idProduct') id: string) {
+    try {
+      return this.productsService.findOne(id);
+    } catch (error) {
+      throw new HttpException('Product not found', HttpStatus.NOT_FOUND);
+    }
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateProductDto: UpdateProductDto) {
-   
+  @Patch('/update')
+  async update(@Query('idProduct') id: string, @Body() updateProductDto: UpdateProductDto) {
+    try{
+      return this.productsService.update(id,updateProductDto)
+      
+    }catch(error){
+      throw new HttpException( 'Product that has already been removed', HttpStatus.BAD_REQUEST);
+    }
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    
+  @Delete()
+  async remove(@Query('id') id: string) {
+    try {
+      return await this.productsService.remove(id);
+    } catch (error) {
+      throw new HttpException('Product not delete', HttpStatus.BAD_REQUEST);
+    }
   }
 }

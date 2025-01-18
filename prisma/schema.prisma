@@ -51,6 +51,7 @@ model Products {
   height             Float
   width              Float
   weight             Float
+  units              Float 
   description        String
   ShipmentsProductss ShipmentsProducts[]
 }

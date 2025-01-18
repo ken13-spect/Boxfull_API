@@ -12,7 +12,6 @@ export class AuthController {
 
     @Post('login')
     singIng(@Body() loginUserDto: LoginUserDTO): Promise<AuthResponse>{
-        console.log("llegue")
         return this.authService.sinIng(loginUserDto);
     }
 
