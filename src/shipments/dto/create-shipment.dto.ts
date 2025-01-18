@@ -1,10 +1,17 @@
-import { Type } from "class-transformer";
-import { IsArray, IsDateString, IsEmail, IsNotEmpty, IsOptional, IsString, ValidateNested } from "class-validator";
-import { CreateProductDto } from "src/products/dto/create-product.dto";
+import { Type } from 'class-transformer';
+import {
+  IsArray,
+  IsDateString,
+  IsEmail,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  ValidateNested,
+} from 'class-validator';
+import { CreateProductDto } from 'src/products/dto/create-product.dto';
 
 export class CreateShipmentDto {
-
-    @IsString()
+  @IsString()
   @IsNotEmpty()
   deliveryAddress: string;
 
@@ -40,21 +47,26 @@ export class CreateShipmentDto {
   @IsNotEmpty()
   pickUpAddress: string;
 
-  @IsString()
+//Checking to receive id with correct format
   @IsNotEmpty()
-  departmentId: string;
+  department: {
+    id: string;
+  };
 
-  @IsString()
-  @IsNotEmpty()
-  townId: string;
 
-  @IsString()
   @IsNotEmpty()
-  userId: string;
+  towns: {
+    id: string;
+  };
+
+
+  @IsNotEmpty()
+  user: {
+    id: string;
+  };
 
   @IsArray()
   @ValidateNested({ each: true })
   @Type(() => CreateProductDto)
-  products: CreateProductDto[];
-
+  shiptmentProducts: CreateProductDto[];
 }
