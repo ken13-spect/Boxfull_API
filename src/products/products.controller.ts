@@ -14,16 +14,18 @@ import {
 import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
+import { AuthGuard } from 'src/auth/auth.guard/auth.guard';
 
 
 @Controller('products')
+@UseGuards(AuthGuard)
 export class ProductsController {
   constructor(private productsService: ProductsService) {}
 
   @Post()
-  create(@Body() createProductDto: CreateProductDto) {
+  create(@Query('id') idShip: string, @Body() createProductDto: CreateProductDto) {
     try {
-      return this.productsService.create(createProductDto);
+      return this.productsService.create(idShip,createProductDto);
     } catch (error) {
       throw new HttpException('Product not delete', HttpStatus.BAD_REQUEST);
     }
