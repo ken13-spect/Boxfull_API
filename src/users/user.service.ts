@@ -3,6 +3,8 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { User } from './entities/user.entity';
 import { UtilsServices } from 'src/services/services.service';
+import { ExceptionsHandler } from '@nestjs/core/exceptions/exceptions-handler';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class UserService {
@@ -18,12 +20,13 @@ export class UserService {
   async create(createUserDto: CreateUserDto): Promise<User> {
     //check if user already exists
     const existsUser = await this.prisma.users.findUnique({
-      where: { email: createUserDto.email,},
+      where: { email: createUserDto.email },
     });
 
     //if user exists, throw an error
-    if (existsUser)  throw new HttpException('User already exists', HttpStatus.BAD_REQUEST);
-     
+    if (existsUser)
+      throw new HttpException('User already exists', HttpStatus.BAD_REQUEST);
+
     //create user
     return this.prisma.users.create({
       data: {
@@ -36,20 +39,18 @@ export class UserService {
     });
   }
 
-
-  async findUserByEmail(email: string): Promise<User|undefined> {
+  async findEmail(email: string): Promise<{password:string} | null> {
     return await this.prisma.users.findUnique({
       where: { email },
+      select:{
+        password: true
+      }
     });
   }
 
-
-  async remove(id: number): Promise<User> {
-    //convert id to string
-    const userId = id.toString();
+  async remove(id: string): Promise<User> {
     return await this.prisma.users.delete({
-      where: { id : userId },
+      where: { id: id },
     });
-   
   }
 }

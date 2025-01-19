@@ -6,6 +6,7 @@ import { AuthResponse } from './dto/auth-response-dto';
 import { JwtService } from '@nestjs/jwt';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import { User } from 'src/users/entities/user.entity';
+import { ExceptionsHandler } from '@nestjs/core/exceptions/exceptions-handler';
 
 @Injectable()
 export class AuthService {
@@ -15,18 +16,22 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async sinIng({ email, password }: LoginUserDTO): Promise<AuthResponse> {
+  async sinIng({ password, email }: LoginUserDTO): Promise<AuthResponse> {
     //find user by email
-    const user = this.userServices.findUserByEmail(email);
-    //check if user exists
-    if (!user) throw new HttpException('User not found', HttpStatus.NOT_FOUND);
-    //check if password is correct
-    const isPasswordValid = this.utilsServices.comparePassword(
+    const user = await this.userServices.findEmail(email);
+
+    if (!user)
+      throw new HttpException('User no existing', HttpStatus.BAD_REQUEST);
+    //use bcrypt conmpare
+    const validPassword = await this.utilsServices.comparePassword(
       password,
-      password,
+      user.password,
     );
-    if (!isPasswordValid)
-      throw new HttpException('Invalid credentials', HttpStatus.UNAUTHORIZED);
+
+    if (!validPassword) {
+      throw new HttpException('Incorrect password', HttpStatus.UNAUTHORIZED);
+    }
+
     //generate token
     const token = await this.jwtService.signAsync({ email });
     return { access_token: token };
