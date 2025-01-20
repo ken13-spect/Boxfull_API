@@ -22,7 +22,4 @@ export class ShipmentsController {
   create(@Body() createShipmentDto: CreateShipmentDto) {
     return this.shipmentsService.create(createShipmentDto);
   }
-
-  @Get()
-  findAll() {}
 }

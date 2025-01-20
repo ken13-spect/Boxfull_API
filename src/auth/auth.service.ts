@@ -19,15 +19,15 @@ export class AuthService {
   async sinIng({ password, email }: LoginUserDTO): Promise<AuthResponse> {
     //find user by email
     const user = await this.userServices.findEmail(email);
-
+    //If the user is not found
     if (!user)
-      throw new HttpException('User no existing', HttpStatus.BAD_REQUEST);
+      throw new HttpException('User no existing', HttpStatus.NOT_FOUND);
     //use bcrypt conmpare
     const validPassword = await this.utilsServices.comparePassword(
       password,
       user.password,
     );
-
+    //password does not match
     if (!validPassword) {
       throw new HttpException('Incorrect password', HttpStatus.UNAUTHORIZED);
     }
