@@ -24,15 +24,17 @@ export class ProductsService {
     return this.prisma.products.findMany();
   }
 
-  async findByShipId(id: string): Promise<Products[]> {
-    try {
-      return this.prisma.products.findMany({
-        where: {
-          ShipmentsId: id,
-        },
-      });
-    } catch (error) {
-      throw new HttpException('Product not found', HttpStatus.NOT_FOUND);
+  async findByShipId(id: string): Promise<Products[] | null> {
+    const products = this.prisma.products.findMany({
+      where: {
+        ShipmentsId: id,
+      },
+    });
+
+    if ((await products).length == 0) {
+      throw new HttpException('products not found', HttpStatus.NOT_FOUND);
+    } else {
+      return products;
     }
   }
 

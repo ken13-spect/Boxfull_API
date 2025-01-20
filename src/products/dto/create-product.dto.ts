@@ -1,5 +1,5 @@
 import { IsInt, IsNumber, IsString, MaxLength } from "class-validator";
-
+import { ApiPropertyOptional } from '@nestjs/swagger';
 export class CreateProductDto {
   @IsNumber()
   length: number;
